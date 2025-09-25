@@ -86,11 +86,27 @@ export const connectTimelineStream = (timelineId, channelName, params = {}, opti
         }
       },
 
+      /**
+       * @param {any} timelineId
+       * @param {any} streamName
+       */
+      shouldUpdate(timelineId, streamName) {
+        const stream = streamName[0];
+        if (timelineId === 'home' && streamName.startsWith('user')) {
+          return true;
+        }
+
+        return timelineId === stream;
+      },
+
       onReceive(data) {
         switch (data.event) {
         case 'update':
           // @ts-expect-error
-          dispatch(updateTimeline(timelineId, JSON.parse(data.payload), options.accept));
+          if ((timelineId === 'home' && data.stream[0].startsWith('user')) || (timelineId === 'community' && data.stream[0].startsWith('public')) || (timelineId === data.stream[0])) {
+            // @ts-expect-error
+            dispatch(updateTimeline(timelineId, JSON.parse(data.payload), options.accept));
+          }
           break;
         case 'status.update':
           // @ts-expect-error

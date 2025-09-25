@@ -65,19 +65,9 @@ export const ImmutableHashtag = ({ hashtag }: ImmutableHashtagProps) => (
   <Hashtag
     name={hashtag.get('name') as string}
     to={`/tags/${hashtag.get('name') as string}`}
-    people={
-      (hashtag.getIn(['history', 0, 'accounts']) as number) * 1 +
-      (hashtag.getIn(['history', 1, 'accounts']) as number) * 1
-    }
-    history={(
-      hashtag.get('history') as Immutable.Collection.Indexed<
-        Immutable.Map<string, number>
-      >
-    )
-      .reverse()
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .map((day) => day.get('uses')!)
-      .toArray()}
+    people={0}
+    uses={0}
+    history={[]}
   />
 );
 

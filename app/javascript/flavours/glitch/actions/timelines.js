@@ -157,7 +157,7 @@ export function fillTimelineGaps(timelineId, path, params = {}) {
 }
 
 export const expandHomeTimeline            = ({ maxId } = {}) => expandTimeline('home', '/api/v1/timelines/home', { max_id: maxId });
-export const expandPublicTimeline          = ({ maxId, onlyMedia, onlyRemote, allowLocalOnly } = {}) => expandTimeline(`public${onlyRemote ? ':remote' : (allowLocalOnly ? ':allow_local_only' : '')}${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { remote: !!onlyRemote, allow_local_only: !!allowLocalOnly, max_id: maxId, only_media: !!onlyMedia });
+export const expandPublicTimeline          = ({ maxId, onlyMedia, onlyRemote, allowLocalOnly } = {}, done = () => {}) => expandTimeline(`public${onlyRemote ? ':remote' : (allowLocalOnly ? ':allow_local_only' : '')}${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { remote: !!onlyRemote, max_id: maxId, only_media: !!onlyMedia }, done);
 export const expandCommunityTimeline       = ({ maxId, onlyMedia } = {}) => expandTimeline(`community${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { local: true, max_id: maxId, only_media: !!onlyMedia });
 export const expandBubbleTimeline          = ({ maxId, onlyMedia } = {}) => expandTimeline(`bubble${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { bubble: true, max_id: maxId, only_media: !!onlyMedia });
 export const expandDirectTimeline          = ({ maxId } = {}) => expandTimeline('direct', '/api/v1/timelines/direct', { max_id: maxId });
@@ -177,7 +177,7 @@ export const expandHashtagTimeline         = (hashtag, { maxId, tags, local } = 
 };
 
 export const fillHomeTimelineGaps      = () => fillTimelineGaps('home', '/api/v1/timelines/home', {});
-export const fillPublicTimelineGaps    = ({ onlyMedia, onlyRemote, allowLocalOnly } = {}) => fillTimelineGaps(`public${onlyRemote ? ':remote' : (allowLocalOnly ? ':allow_local_only' : '')}${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { remote: !!onlyRemote, only_media: !!onlyMedia, allow_local_only: !!allowLocalOnly });
+export const fillPublicTimelineGaps    = ({ onlyMedia, onlyRemote, allowLocalOnly } = {}, done = () => {}) => fillTimelineGaps(`public${onlyRemote ? ':remote' : (allowLocalOnly ? ':allow_local_only' : '')}${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { remote: !!onlyRemote, only_media: !!onlyMedia }, done);
 export const fillCommunityTimelineGaps = ({ onlyMedia } = {}) => fillTimelineGaps(`community${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { local: true, only_media: !!onlyMedia });
 export const fillBubbleTimelineGaps    = ({ onlyMedia } = {}) => fillTimelineGaps(`bubble${onlyMedia ? ':media' : ''}`, '/api/v1/timelines/public', { bubble: true, only_media: !!onlyMedia });
 export const fillListTimelineGaps      = (id) => fillTimelineGaps(`list:${id}`, `/api/v1/timelines/list/${id}`, {});

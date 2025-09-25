@@ -86,11 +86,11 @@ export const config: UserConfigFnPromise = async ({ mode, command }) => {
         output: {
           chunkFileNames({ facadeModuleId, name }) {
             if (!facadeModuleId) {
-              return '[name]-[hash].js';
+              return '[name].js';
             }
             if (/mastodon\/locales\/[a-zA-Z\-]+\.json/.exec(facadeModuleId)) {
               // put all locale files in `intl/`
-              return 'intl/[name]-[hash].js';
+              return 'intl/[name].js';
             } else if (/node_modules\/@formatjs\//.exec(facadeModuleId)) {
               // use a custom name for formatjs polyfill files
               const newName = /node_modules\/@formatjs\/([^/]+)\//.exec(
@@ -98,7 +98,7 @@ export const config: UserConfigFnPromise = async ({ mode, command }) => {
               );
 
               if (newName?.[1]) {
-                return `intl/[name]-${newName[1]}-[hash].js`;
+                return `intl/[name]-${newName[1]}.js`;
               }
             } else if (name === 'index') {
               // Use a custom name for chunks, to avoid having too many of them called "index"
@@ -107,10 +107,10 @@ export const config: UserConfigFnPromise = async ({ mode, command }) => {
               const parent = parts.at(-2);
 
               if (parent) {
-                return `${parent}-[name]-[hash].js`;
+                return `${parent}-[name].js`;
               }
             }
-            return '[name]-[hash].js';
+            return '[name].js';
           },
         },
       },

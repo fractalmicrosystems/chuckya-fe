@@ -30,7 +30,7 @@ export const fetchServer = () => (dispatch, getState) => {
   dispatch(fetchServerRequest());
 
   api()
-    .get('/api/v2/instance').then(({ data }) => {
+    .get('/api/v1/instance').then(({ data }) => {
       if (data.contact.account) dispatch(importFetchedAccount(data.contact.account));
       dispatch(fetchServerSuccess(data));
     }).catch(err => dispatch(fetchServerFail(err)));

@@ -94,25 +94,7 @@ const sharedCallbacks = {
 
   // @ts-expect-error
   received(data) {
-    const { stream } = data;
-
-    subscriptions.filter(({ channelName, params }) => {
-      const streamChannelName = stream[0];
-
-      if (stream.length === 1) {
-        return channelName === streamChannelName;
-      }
-
-      const streamIdentifier = stream[1];
-
-      if (['hashtag', 'hashtag:local'].includes(channelName)) {
-        return channelName === streamChannelName && params.tag === streamIdentifier;
-      } else if (channelName === 'list') {
-        return channelName === streamChannelName && params.list === streamIdentifier;
-      }
-
-      return false;
-    }).forEach(subscription => {
+    subscriptions.forEach(subscription => {
       subscription.onReceive(data);
     });
   },
@@ -241,7 +223,7 @@ const createConnection = (streamingAPIBaseURL, accessToken, channelName, { conne
 
   if (streamingAPIBaseURL.startsWith('ws')) {
     // @ts-expect-error
-    const ws = new WebSocketClient(`${streamingAPIBaseURL}/api/v1/streaming/?${params.join('&')}`, accessToken);
+    const ws = new WebSocketClient(`${streamingAPIBaseURL}/api/v1/streaming/?stream=user&${params.join('&')}`, accessToken);
 
     // @ts-expect-error
     ws.onopen = connected;

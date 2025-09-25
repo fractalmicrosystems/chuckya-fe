@@ -11,7 +11,7 @@ function openWebCache() {
 }
 
 function fetchRoot() {
-  return fetch('/', { credentials: 'include', redirect: 'manual' });
+  return fetch('/web', { credentials: 'include', redirect: 'manual' });
 }
 
 
@@ -57,7 +57,7 @@ registerRoute(
 // Cause a new version of a registered Service Worker to replace an existing one
 // that is already installed, and replace the currently active worker on open pages.
 self.addEventListener('install', function(event) {
-  event.waitUntil(Promise.all([openWebCache(), fetchRoot()]).then(([cache, root]) => cache.put('/', root)));
+  event.waitUntil(Promise.all([openWebCache(), fetchRoot()]).then(([cache, root]) => cache.put('/web', root)));
 });
 
 self.addEventListener('activate', function(event) {
@@ -67,20 +67,8 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   const url = new URL(event.request.url);
 
-  if (url.pathname === '/auth/sign_out') {
-    const asyncResponse = fetch(event.request);
-    const asyncCache = openWebCache();
-
-    event.respondWith(asyncResponse.then(response => {
-      if (response.ok || response.type === 'opaqueredirect') {
-        return Promise.all([
-          asyncCache.then(cache => cache.delete('/')),
-          indexedDB.deleteDatabase('mastodon'),
-        ]).then(() => response);
-      }
-
-      return response;
-    }));
+  if (url.pathname.startsWith('/web')) {
+    return;
   }
 });
 
